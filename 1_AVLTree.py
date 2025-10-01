@@ -1,8 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[7]:
-
+import graphviz
 
 class Node:
     __slots__ = ('key', 'left', 'right', 'height')
@@ -12,10 +8,6 @@ class Node:
         self.left = None
         self.right = None
         self.height = 1
-
-
-# In[8]:
-
 
 class AVLTree:
     def __init__(self, *args):
@@ -158,26 +150,35 @@ class AVLTree:
         return (abs(balance) <= 1 and 
                 self._is_balanced(node.left) and 
                 self._is_balanced(node.right))
-
-
-# In[9]:
-
+        
+    def visualize(self, filename='avl_tree'):
+        dot = graphviz.Digraph(comment='AVL Tree')
+        dot.attr('node', shape='circle')
+        
+        def add_nodes_edges(node, parent_id=None, label=''):
+            if node is not None:
+                node_id = str(id(node))
+                dot.node(node_id, f'{node.key}\n(h={node.height})')
+                if parent_id is not None:
+                    dot.edge(parent_id, node_id, label=label)
+                add_nodes_edges(node.left, node_id, 'L')
+                add_nodes_edges(node.right, node_id, 'R')
+        
+        add_nodes_edges(self.root)
+        dot.render(filename, view=True, cleanup=True)
 
 avl1 = AVLTree(10, 43, 24, 45, 2)
 print(avl1)
 
 numbers = [5, 36, 74, 23, 43, 36, 85, 10]
 avl2 = AVLTree(*numbers)
-print(avl2)
+avl2.visualize()
 
 avl3 = AVLTree()
 avl3.insert(5)
 avl3.insert(3)
 avl3.insert(789)
 print(avl3)
-
-
-# In[ ]:
 
 
 
