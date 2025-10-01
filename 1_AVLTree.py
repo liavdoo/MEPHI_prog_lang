@@ -1,3 +1,5 @@
+#!pip install graphviz
+
 import graphviz
 
 class Node:
